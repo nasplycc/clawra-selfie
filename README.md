@@ -34,6 +34,31 @@
 
 ---
 
+## Raya 人设设定（来自当前 SOUL / IDENTITY）
+
+这个项目不是纯功能型脚本，它依赖一个相对稳定的人设来保持文本互动和视觉输出的一致性。
+
+当前默认角色是 **Raya**：
+
+- **名字：** Raya
+- **年龄：** 18 岁
+- **身份气质：** 一个年轻、漂亮、自然、耐看的中国女生，像陪你一起生活和成长的数字搭子
+- **成长背景：** 中国出生长大，处在高中毕业到大学早期的年龄感区间
+- **城市气质：** 偏上海 / 杭州 / 深圳式的新都市感，但不强绑定某一座城市
+- **性格关键词：** 清醒、温柔、干净、克制、真实
+- **视觉关键词：** 鹅蛋脸 / 小椭圆脸、黑色或深棕色中长发、淡妆伪素颜、匀称纤细、自然灯光感
+- **穿搭关键词：** 基础款、轻日常、轻法式、轻韩系、干净配色
+
+这部分设定会同时影响：
+
+- 对话时的语气与角色表达
+- 出图时的 prompt 锚点
+- 用户对“她是谁”的持续认知
+
+如果你想在别的 OpenClaw 里复用这个 skill，也可以沿用这套设定，或者替换成你自己的角色设定。
+
+---
+
 ## 为什么要做这个
 
 原版 Clawra 的思路很有吸引力，但其中一些更强的模型调用链路是要花钱的。
@@ -85,6 +110,55 @@
 
 - **左图**：用户提供的人脸参考图，作为官方脸锚点来源
 - **右图**：基于该参考图继续生成的海边散步场景图，用来展示人物状态图与场景延展能力
+
+---
+
+## 安装到其它 OpenClaw
+
+如果你想把这个 skill 安装到另一台 OpenClaw 上，最简单的是直接 clone 到 skills 目录。
+
+### 一条命令安装
+
+```bash
+git clone https://github.com/nasplycc/clawra-selfie.git ~/.openclaw/skills/clawra-selfie
+```
+
+### 更新
+
+```bash
+git -C ~/.openclaw/skills/clawra-selfie pull
+```
+
+### 最低使用步骤
+
+1. 把仓库 clone 到：
+   - `~/.openclaw/skills/clawra-selfie`
+2. 准备依赖：
+   - `bash`
+   - `curl`
+   - `jq`
+3. 配置环境变量：
+
+```bash
+HF_TOKEN=your_huggingface_token
+HF_IMAGE_MODEL=black-forest-labs/FLUX.1-schnell
+HF_API_BASE=https://router.huggingface.co/hf-inference/models
+```
+
+4. 如果你也想复用 Raya 这一套角色效果：
+   - 在目标 agent 的 `SOUL.md` 中加入 Raya 的人设说明
+   - 在目标 agent 的工作区里放入官方脸参考图
+   - 保持 prompt 锚点与参考图路径一致
+
+### 可选：官方脸参考图路径
+
+把你的参考图放到目标工作区，例如：
+
+```text
+references/raya-official-face-current.jpg
+```
+
+脚本会优先读取它作为“官方脸”锚点。
 
 ---
 
@@ -278,6 +352,7 @@ node ./scripts/clawra-selfie.ts \
 - 健身房状态图
 - 咖啡店侧颜
 - 城市街头随手感
+- 海边散步全景图
 
 更多示例可以看：[`examples/README.md`](examples/README.md)
 
@@ -298,6 +373,7 @@ node ./scripts/clawra-selfie.ts \
 - [x] 拆分 direct / mirror 两种模式
 - [x] 建立官方脸软锚点机制
 - [x] 整理成 GitHub 可展示项目
+- [x] 增加图文展示 README
 - [ ] 接入更强的 reference-image editing 后端
 - [ ] 抽象掉更通用的 workspace / path 配置
 - [ ] 增加更完整的示例图 / 截图展示
@@ -315,11 +391,12 @@ node ./scripts/clawra-selfie.ts \
 
 ## 当前状态
 
-当前这个仓库已经是一个**可实际使用的私有项目版本**，包含：
+当前这个仓库已经是一个**可实际使用的项目版本**，包含：
 
 - Hugging Face 默认生图链路
 - Gemini 默认禁用
 - 官方脸软锚点支持
 - 围绕 Raya 的 prompt 固化工作流
+- 可直接 clone 到其它 OpenClaw skills 目录使用
 
 它现在已经能用；而更强的第二阶段，主要取决于后端升级，而不是只靠继续修 prompt。
