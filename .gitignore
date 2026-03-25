@@ -1,0 +1,7 @@
+generated/
+*.log
+.env
+.env.*
+*.tmp
+*.bak
+.DS_Store
