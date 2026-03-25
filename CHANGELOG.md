@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.1.0 - 2026-03-25
+
+### Added
+- Qwen (`qwen-image-plus`) image generation backend via DashScope async API
+- Qwen-first routing with Hugging Face fallback and optional Gemini compatibility path
+- Expanded README showcase to a 4-image two-row layout
+- Updated official face asset and latest generated showcase materials
+
+### Changed
+- README hero image now uses the current official face
+- README backend description now reflects `Qwen -> Gemini(optional) -> Hugging Face fallback`
+- Project showcase order updated to: official face / beach / Everest / swimming pool
+
+### Notes
+- Qwen is now the preferred backend for day-to-day generation in this project.
+- Hugging Face remains the fallback free backend.
+- Face consistency is still soft consistency, not hard face lock.
+
 ## v1.0.0 - 2026-03-25
 
 First public release.

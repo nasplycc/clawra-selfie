@@ -11,7 +11,7 @@
 
 <p align="center">
   <img alt="状态" src="https://img.shields.io/badge/状态-可用-3fb950">
-  <img alt="release" src="https://img.shields.io/badge/release-v1.0.0-22c55e">
+  <img alt="release" src="https://img.shields.io/badge/release-v1.1.0-22c55e">
   <img alt="后端" src="https://img.shields.io/badge/后端-Qwen%20%2B%20HF-fcc72b">
   <img alt="Gemini" src="https://img.shields.io/badge/Gemini-可选回退-6f42c1">
   <img alt="ClawHub" src="https://img.shields.io/badge/ClawHub-nasplycc--clawra--selfie-8b5cf6">
@@ -36,8 +36,8 @@
 - 保留 **Clawra / Raya 式的人设出图体验**
 - 直接融入 **OpenClaw 原生工作流**
 - 不把 **付费模型 / 付费后端** 作为默认前提
-- 先用一条**当前可跑通的 Hugging Face 免费路线**
-- 同时为后续升级到更强的人脸一致性方案预留空间
+- 先用一条**当前可跑通的 Qwen 优先路线**
+- 同时保留 **Hugging Face 免费 fallback** 与 Gemini 兼容升级路径
 
 **原始参考项目：**
 - GitHub: <https://github.com/SumeLabs/clawra>
@@ -97,11 +97,12 @@
 - **根据提示词生成自拍 / 日常状态图 / 场景图**
 - **Direct 模式**：适合近景自拍、当前状态、表情与氛围感
 - **Mirror 模式**：适合半身、全身、健身房、穿搭、镜前区域构图
+- **Qwen 图像主链路已接入**：当前优先使用 `qwen-image-plus`
 - **官方脸软锚点机制**：通过工作区参考图尽量稳住脸
 - **固定 FACE_ANCHOR / NEGATIVE_ANCHOR**：尽量降低脸和身材漂移
 - **可接 OpenClaw 消息发送链路**：能直接发回 Telegram 等渠道
-- **Gemini 探测链路已接入，但默认禁用**
-- **当前稳定默认后端仍是 Hugging Face**
+- **Gemini 探测链路已接入，作为可选回退路径保留**
+- **Hugging Face 仍保留为 fallback 后端**
 
 ---
 
