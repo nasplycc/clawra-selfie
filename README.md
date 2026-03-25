@@ -68,10 +68,23 @@
 
 ## 效果展示
 
-> 你可以把生成的示例图放在 `assets/` 下，然后在这里补三张：
-> - 近景自拍
-> - 半身/全身镜前照
-> - 场景图（教室/咖啡馆/街头）
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/showcase-face.jpg" alt="人脸参考示例" width="280" /><br/>
+      <sub>人脸参考 / 官方脸锚点示例</sub>
+    </td>
+    <td align="center">
+      <img src="assets/showcase-gym.jpg" alt="健身房状态图示例" width="280" /><br/>
+      <sub>健身房状态图 / 全身场景示例</sub>
+    </td>
+  </tr>
+</table>
+
+这两张图分别对应当前工作流中的两个核心用途：
+
+- **左图**：作为“官方脸”或参考脸来源，用来尽量稳定角色的人脸方向
+- **右图**：作为实际场景生成结果示例，展示健身房状态图 / 全身图能力
 
 ---
 
@@ -164,7 +177,9 @@ GEMINI_API_KEY=your_google_gemini_api_key
 clawra-selfie/
 ├─ assets/
 │  ├─ clawra.png
-│  └─ demo.jpg
+│  ├─ demo.jpg
+│  ├─ showcase-face.jpg
+│  └─ showcase-gym.jpg
 ├─ examples/
 │  └─ README.md
 ├─ scripts/
