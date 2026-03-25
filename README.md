@@ -110,25 +110,25 @@
 <table>
   <tr>
     <td align="center">
-      <img src="assets/showcase-face.jpg" alt="新参考图" width="250" /><br/>
-      <sub>新参考图 / 当前官方脸锚点</sub>
+      <img src="assets/showcase-face.jpg" alt="官方图" width="250" /><br/>
+      <sub>官方图 / 当前官方脸锚点</sub>
     </td>
     <td align="center">
-      <img src="assets/showcase-gym.jpg" alt="健身房镜子前自拍" width="250" /><br/>
-      <sub>健身房镜子前自拍 / 基于参考图生成</sub>
+      <img src="assets/showcase-beach.jpg" alt="海边散步图" width="250" /><br/>
+      <sub>海边散步图 / 同一官方图的人设场景延展</sub>
     </td>
     <td align="center">
-      <img src="assets/showcase-beach.jpg" alt="海边散步全景图" width="250" /><br/>
-      <sub>海边散步全景图 / 基于参考图的人设场景延展</sub>
+      <img src="assets/showcase-everest.jpg" alt="珠穆朗玛峰登山图" width="250" /><br/>
+      <sub>珠穆朗玛峰登山图 / 同一官方图的极限场景延展</sub>
     </td>
   </tr>
 </table>
 
 这三张图用于说明当前 README 里的完整工作流：
 
-- **左图**：用户提供的新参考图，作为当前官方脸锚点来源
-- **中图**：基于该参考图生成的健身房镜前自拍，用来展示日常状态图能力
-- **右图**：继续沿用同一参考图生成的海边散步场景图，用来展示人物场景延展能力
+- **左图**：当前确认使用的官方图，作为官方脸锚点来源
+- **中图**：沿用同一官方图生成的海边散步图，用来展示日常场景延展能力
+- **右图**：沿用同一官方图生成的珠穆朗玛峰登山图，用来展示强场景迁移能力
 
 ---
 
