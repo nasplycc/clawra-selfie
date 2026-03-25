@@ -22,7 +22,9 @@
 <p align="center">
   <a href="https://clawhub.com/nasplycc-clawra-selfie">ClawHub 页面</a> ·
   <a href="https://github.com/nasplycc/clawra-selfie">GitHub 仓库</a> ·
-  <a href="https://github.com/SumeLabs/clawra">原始参考项目</a>
+  <a href="https://github.com/SumeLabs/clawra">原始参考项目</a> ·
+  <a href="CONTRIBUTING.md">贡献指南</a> ·
+  <a href="SECURITY.md">安全说明</a>
 </p>
 
 ---
@@ -483,5 +485,13 @@ references/raya-official-face-current.jpg
 - 官方脸软锚点支持
 - 围绕 Raya 的 prompt 固化工作流
 - 可直接 clone 到其它 OpenClaw skills 目录使用
+- 已发布到 ClawHub：`nasplycc-clawra-selfie`
 
 它现在已经能用；而更强的第二阶段，主要取决于后端升级，而不是只靠继续修 prompt。
+
+---
+
+## 项目协作与安全
+
+- 贡献说明：[`CONTRIBUTING.md`](CONTRIBUTING.md)
+- 安全说明：[`SECURITY.md`](SECURITY.md)
