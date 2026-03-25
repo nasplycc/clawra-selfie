@@ -115,9 +115,23 @@
 
 ## 安装到其它 OpenClaw
 
-如果你想把这个 skill 装到另一台 OpenClaw，推荐直接用安装脚本。
+如果你想把这个 skill 装到另一台 OpenClaw，现在有三种方式：
 
-### 推荐：一条命令安装
+### 方式 1：通过 ClawHub 安装（推荐给普通用户）
+
+```bash
+clawhub install nasplycc-clawra-selfie
+```
+
+安装后，skill 会进入你的 OpenClaw skills 目录。
+
+更新：
+
+```bash
+clawhub update nasplycc-clawra-selfie
+```
+
+### 方式 2：通过安装脚本一条命令安装
 
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/nasplycc/clawra-selfie/main/scripts/install.sh)"
@@ -129,7 +143,7 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/nasplycc/clawra-selfie/m
 ~/.openclaw/skills/clawra-selfie
 ```
 
-### 手动 clone 安装
+### 方式 3：手动 clone 安装
 
 ```bash
 git clone https://github.com/nasplycc/clawra-selfie.git ~/.openclaw/skills/clawra-selfie
