@@ -10,15 +10,15 @@
 </p>
 
 <p align="center">
-  <img alt="status" src="https://img.shields.io/badge/status-working-3fb950">
-  <img alt="backend" src="https://img.shields.io/badge/backend-HuggingFace-fcc72b">
-  <img alt="gemini" src="https://img.shields.io/badge/Gemini-default_disabled-6f42c1">
-  <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
+  <img alt="状态" src="https://img.shields.io/badge/状态-可用-3fb950">
+  <img alt="后端" src="https://img.shields.io/badge/后端-HuggingFace-fcc72b">
+  <img alt="Gemini" src="https://img.shields.io/badge/Gemini-默认禁用-6f42c1">
+  <img alt="许可证" src="https://img.shields.io/badge/许可证-MIT-blue">
 </p>
 
 ---
 
-## 这是什么
+## 项目简介
 
 这个项目的灵感来自 [SumeLabs/clawra](https://github.com/SumeLabs/clawra)，但我把它改造成了一个更适合当前实际使用场景的版本：
 
@@ -63,6 +63,15 @@
 - **可接 OpenClaw 消息发送链路**：能直接发回 Telegram 等渠道
 - **Gemini 探测链路已接入，但默认禁用**
 - **当前稳定默认后端仍是 Hugging Face**
+
+---
+
+## 效果展示
+
+> 你可以把生成的示例图放在 `assets/` 下，然后在这里补三张：
+> - 近景自拍
+> - 半身/全身镜前照
+> - 场景图（教室/咖啡馆/街头）
 
 ---
 
