@@ -1,76 +1,81 @@
 # Clawra Selfie
 
-A lightweight **Clawra-inspired selfie/image skill** for OpenClaw.
+> Clawra-inspired selfie generation for OpenClaw, powered by a practical **Hugging Face free-tier fallback**.
 
-This project was inspired by [SumeLabs/clawra](https://github.com/SumeLabs/clawra), but adapted for a different practical goal:
+![Clawra](assets/clawra.png)
 
-- keep the **Clawra / Raya-style roleplay image experience**
-- avoid paid image backends as the default path
-- use a **free Hugging Face generation route** as the current working backend
-- preserve a future upgrade path for **reference-image editing**, **paid APIs**, or **LoRA-based consistency**
+A lightweight OpenClaw image skill inspired by [SumeLabs/clawra](https://github.com/SumeLabs/clawra), adapted for a more practical everyday setup:
 
-## Why this exists
+- keep the **Clawra / Raya-style image roleplay experience**
+- avoid making paid image backends the default requirement
+- use a **working free Hugging Face route** as the active backend
+- keep a clean upgrade path for **reference-image editing**, **paid APIs**, and **LoRA-based identity consistency**
 
-The original Clawra flow is inspiring, but some of its model/provider choices are paid.
-For this project, the goal was to build a version that:
+## Overview
 
-- works inside an OpenClaw agent workflow
-- can generate selfie-like / life-state images on demand
-- can send results directly to messaging channels
-- can stay usable on a free stack for experimentation
+This project exists because the original Clawra idea is genuinely good, but some of the most powerful model routes are paid.
+
+So this version takes a different path:
+
+- build a **usable OpenClaw-native workflow first**
+- keep the experience good enough for day-to-day use
+- preserve future compatibility with stronger backends later
 
 In short:
 
-> **Clawra vibe, OpenClaw-native workflow, Hugging Face free-tier fallback.**
+> **Clawra vibe, OpenClaw-native workflow, free-first backend strategy.**
 
 ---
 
 ## Features
 
-- **OpenClaw skill-style structure**
-- **Prompt-driven image generation** for selfie / daily-life / scenario images
-- **Direct mode** for close-up current-state selfie style
-- **Mirror mode** for half-body / full-body / mirror-area compositions
-- **Soft official-face mechanism** via a workspace reference image
-- **Fixed anchor prompts** for better identity consistency
-- **Negative anchor prompts** to reduce drift
-- **Telegram / channel send workflow support** through OpenClaw tooling
-- **Gemini probe path exists but is disabled by default**
-- **Hugging Face remains the default active backend**
+- **OpenClaw-friendly skill structure**
+- **Prompt-driven selfie / daily-life image generation**
+- **Direct mode** for close-up selfie / current-state shots
+- **Mirror mode** for half-body / full-body / gym / outfit scenes
+- **Soft official-face mechanism** via workspace reference image
+- **Fixed face anchor + negative anchor** for better consistency
+- **Channel-send compatible workflow** for OpenClaw messaging
+- **Gemini probe path implemented but disabled by default**
+- **Hugging Face remains the stable active default**
 
 ---
 
-## Current backend strategy
+## Backend Strategy
 
-### Active default
+### Active backend
 - **Hugging Face**
-- Current default model:
+- Default model:
   - `black-forest-labs/FLUX.1-schnell`
 
-### Optional but currently disabled
+### Disabled by default
 - **Gemini image probe**
-- Disabled by default because current testing showed:
-  - image-generation free-tier quota may be unavailable (`limit: 0`)
-  - not reliable enough as the default path
 
-Gemini can be re-enabled later if billing or quotas change.
+Gemini support exists in the script, but is currently disabled by default because testing showed free-tier image generation was not reliably usable in this setup.
+
+To re-enable it later:
+
+```bash
+ENABLE_GEMINI=1
+GEMINI_API_KEY=your_google_gemini_api_key
+```
 
 ---
 
-## Identity consistency approach
+## Identity Consistency Strategy
 
-This project currently uses **soft consistency**, not true face-locking.
+This project currently uses **soft identity consistency**, not hard face locking.
 
-That means it combines:
+It combines:
 
 - a fixed **FACE_ANCHOR**
 - a fixed **NEGATIVE_ANCHOR**
 - an **official face reference file path**
-- careful prompt shaping for scenario-specific generation
+- scenario-specific prompt shaping
 
-### Official face reference
+### Official face files
 
-The script checks the following files in the workspace:
+The script looks for these files inside the workspace:
 
 - `references/raya-official-face-current.png`
 - `references/raya-official-face-current.jpg`
@@ -79,18 +84,17 @@ The script checks the following files in the workspace:
 - `references/raya-official-face-v1.jpg`
 - `references/raya-official-face-v1.jpeg`
 
-If present, the file is used as a **soft identity anchor**.
+If one exists, it is treated as the current official face anchor.
 
-### Important limitation
+### Limitation
 
-Because the current Hugging Face free backend is still mostly **text-to-image**, identity consistency is only approximate.
-It is good for:
+Because the current free Hugging Face path is still mostly **text-to-image**, this project can only provide:
 
-- stable vibe
-- similar facial structure direction
-- repeated role-consistent images
+- stable visual vibe
+- approximate facial-structure consistency
+- repeatable character direction
 
-It is **not** a guaranteed exact same face every time.
+It **cannot guarantee identical face output every time**.
 
 ---
 
@@ -99,46 +103,55 @@ It is **not** a guaranteed exact same face every time.
 ### Direct mode
 Best for:
 - close-up selfie
-- current mood / status
-- casual candid images
-- location vibe
+- current mood / state
+- casual candid shots
+- daily-life moments
 
 ### Mirror mode
 Best for:
-- mirror-area shots
-- outfit photos
+- mirror-area photos
+- outfit shots
 - half-body / full-body framing
-- gym / fashion / campus / indoor scene compositions
+- gym / campus / indoor compositions
 
-Mirror mode in this project **does not require holding a phone by default**.
+Mirror mode here **does not require holding a phone by default**.
 
 ---
 
-## Project structure
+## Project Structure
 
 ```text
 clawra-selfie/
 ├─ assets/
 │  └─ clawra.png
+├─ examples/
+│  └─ README.md
 ├─ scripts/
 │  ├─ clawra-selfie.sh
 │  └─ clawra-selfie.ts
+├─ .gitignore
+├─ CHANGELOG.md
+├─ LICENSE
+├─ README.md
 └─ SKILL.md
 ```
 
 ### Key files
 
 - `scripts/clawra-selfie.sh`
-  - main generation script
-  - backend routing
-  - anchor prompt assembly
-  - output file writing
+  - main backend logic
+  - prompt assembly
+  - fallback flow
+  - output writing
 
 - `scripts/clawra-selfie.ts`
-  - small Node wrapper for script execution
+  - lightweight Node wrapper
 
 - `SKILL.md`
-  - OpenClaw skill-facing usage instructions
+  - OpenClaw skill-facing usage guidance
+
+- `README.md`
+  - repository-facing project overview
 
 ---
 
@@ -148,8 +161,8 @@ clawra-selfie/
 - `bash`
 - `curl`
 - `jq`
-- an OpenClaw environment
-- a Hugging Face token
+- OpenClaw environment
+- Hugging Face token
 
 ### Environment variables
 
@@ -160,9 +173,6 @@ HF_API_BASE=https://router.huggingface.co/hf-inference/models
 ```
 
 ### Optional Gemini variables
-
-Gemini is currently disabled by default.
-Only enable it if you intentionally want to probe Gemini again.
 
 ```bash
 ENABLE_GEMINI=1
@@ -178,7 +188,7 @@ GEMINI_IMAGE_MODEL=gemini-2.5-flash-image
 
 ```bash
 HF_TOKEN=your_token \
-/home/Jaben/.openclaw/skills/clawra-selfie/scripts/clawra-selfie.sh \
+./scripts/clawra-selfie.sh \
   "at the gym, post-workout mirror-area fitness snapshot" \
   "telegram" \
   "mirror" \
@@ -188,7 +198,7 @@ HF_TOKEN=your_token \
 ### Node wrapper
 
 ```bash
-node /home/Jaben/.openclaw/skills/clawra-selfie/scripts/clawra-selfie.ts \
+node ./scripts/clawra-selfie.ts \
   "in class, side profile from deskmate perspective" \
   "telegram" \
   "mirror" \
@@ -204,7 +214,7 @@ Arguments:
 
 ---
 
-## Example scenarios
+## Example Scenarios
 
 - morning selfie
 - breakfast shop full-body shot
@@ -214,18 +224,20 @@ Arguments:
 - coffee shop side profile
 - running on the field after class
 
+See also: [`examples/README.md`](examples/README.md)
+
 ---
 
-## Known limitations
+## Known Limitations
 
 - Hugging Face free generation is **not true reference-image editing**
 - identity consistency is weaker than paid or local advanced pipelines
 - exact same face cannot be guaranteed every run
-- free backends can change behavior or rate limits over time
+- free backends may change behavior, limits, or availability over time
 
 ---
 
-## Future upgrade path
+## Future Upgrade Path
 
 This project is intentionally structured so it can later upgrade to:
 
@@ -242,17 +254,17 @@ The current implementation is the **practical free version**, not the final ceil
 ## Inspiration
 
 - Original inspiration: [SumeLabs/clawra](https://github.com/SumeLabs/clawra)
-- Adaptation goal: make a usable, OpenClaw-native, lower-cost version for everyday image-roleplay workflows
+- Adaptation goal: make a usable, OpenClaw-native, lower-cost version for daily image-roleplay workflows
 
 ---
 
 ## Status
 
-This repository reflects a working in-use version with:
+This repository currently reflects a working private-repo version with:
 
 - Hugging Face default generation
-- Gemini temporarily disabled
+- Gemini temporarily disabled by default
 - official-face soft anchor support
 - prompt-anchored Raya consistency workflow
 
-If you want the stronger version later, the next step is not more prompt tuning — it is upgrading the backend.
+If stronger identity consistency is needed later, the real upgrade is not more prompt decoration — it is a better backend.
