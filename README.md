@@ -115,15 +115,33 @@
 
 ## 安装到其它 OpenClaw
 
-如果你想把这个 skill 安装到另一台 OpenClaw 上，最简单的是直接 clone 到 skills 目录。
+如果你想把这个 skill 装到另一台 OpenClaw，推荐直接用安装脚本。
 
-### 一条命令安装
+### 推荐：一条命令安装
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/nasplycc/clawra-selfie/main/scripts/install.sh)"
+```
+
+默认会安装到：
+
+```text
+~/.openclaw/skills/clawra-selfie
+```
+
+### 手动 clone 安装
 
 ```bash
 git clone https://github.com/nasplycc/clawra-selfie.git ~/.openclaw/skills/clawra-selfie
 ```
 
 ### 更新
+
+```bash
+bash ~/.openclaw/skills/clawra-selfie/scripts/install.sh
+```
+
+或：
 
 ```bash
 git -C ~/.openclaw/skills/clawra-selfie pull
@@ -259,7 +277,8 @@ clawra-selfie/
 │  └─ README.md
 ├─ scripts/
 │  ├─ clawra-selfie.sh
-│  └─ clawra-selfie.ts
+│  ├─ clawra-selfie.ts
+│  └─ install.sh
 ├─ .gitignore
 ├─ CHANGELOG.md
 ├─ LICENSE
