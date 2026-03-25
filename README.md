@@ -11,6 +11,7 @@
 
 <p align="center">
   <img alt="状态" src="https://img.shields.io/badge/状态-可用-3fb950">
+  <img alt="版本" src="https://img.shields.io/badge/version-1.0.0-22c55e">
   <img alt="后端" src="https://img.shields.io/badge/后端-HuggingFace-fcc72b">
   <img alt="Gemini" src="https://img.shields.io/badge/Gemini-默认禁用-6f42c1">
   <img alt="ClawHub" src="https://img.shields.io/badge/ClawHub-nasplycc--clawra--selfie-8b5cf6">
@@ -127,6 +128,21 @@
 ## 安装到其它 OpenClaw
 
 如果你想把这个 skill 装到另一台 OpenClaw，现在有三种方式：
+
+### 快速安装示例
+
+> 适合已经装好 OpenClaw、并且本机已安装 `clawhub` 的情况。
+
+```bash
+clawhub install nasplycc-clawra-selfie
+export HF_TOKEN=your_huggingface_token
+```
+
+然后把参考图放进你的 agent 工作区：
+
+```text
+references/raya-official-face-current.jpg
+```
 
 ### 方式 1：通过 ClawHub 安装（推荐给普通用户）
 
@@ -408,6 +424,31 @@ node ./scripts/clawra-selfie.ts \
 - 人脸一致性弱于付费后端或本地高级流程
 - 不能保证每次都完全同一张脸
 - 免费后端的可用性、限额和效果可能随时间变化
+
+---
+
+## FAQ / 常见问题
+
+### 1. 为什么参考图放进去了，脸还是不能完全锁死？
+因为当前默认走的是 Hugging Face 免费 text-to-image 路线，本质上还是“提示词优先”的生成，不是强 reference-image editing，所以只能做到**软一致性**，不能做到每次完全同一张脸。
+
+### 2. 官方脸参考图应该放哪？
+推荐放在目标 agent 工作区的：
+
+```text
+references/raya-official-face-current.jpg
+```
+
+脚本会优先从这里读取当前官方脸锚点。
+
+### 3. 没有 HF_TOKEN 会怎样？
+默认后端就是 Hugging Face，所以如果没有设置 `HF_TOKEN`，当前主链路无法正常生成图片。
+
+### 4. 为什么 README 里还提到 Gemini，但默认禁用？
+因为 Gemini 图像路线之前已经做过探针和接线，但在当前免费额度条件下不可稳定使用，所以保留了代码路径，默认关闭。
+
+### 5. 这个 skill 能不能做到完全像某个真人？
+不建议，也不应该把目标设为去高度模仿具体真人。更合理的方向是：稳定角色气质、发型、五官方向和整体视觉 identity。
 
 ---
 
