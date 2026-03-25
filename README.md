@@ -238,15 +238,17 @@ references/raya-official-face-current.jpg
 
 ## 当前后端策略
 
-### 默认启用
+### 当前主链路
+- **Qwen (`qwen-image-plus`)**
+- 当前通过 DashScope 异步接口调用，作为默认优先后端
+
+### 保留的 fallback / 兼容路径
 - **Hugging Face**
-- 当前默认模型：
-  - `black-forest-labs/FLUX.1-schnell`
-
-### 已接入但默认禁用
+  - fallback 模型示例：`black-forest-labs/FLUX.1-schnell`
 - **Gemini image probe**
+  - 当前保留为可选兼容路径，不默认启用
 
-之所以默认禁用 Gemini，是因为实际测试下来，Gemini 生图这条免费链路在当前环境下并不稳定可用，甚至会出现 **free tier = 0** 的情况。
+之所以保留 Gemini / Hugging Face 路径，是为了兼容不同额度、不同环境和后续升级路线。
 
 如果以后要重新打开 Gemini，可以再启用：
 
@@ -283,7 +285,7 @@ GEMINI_API_KEY=your_google_gemini_api_key
 
 ### 重要限制
 
-由于当前 Hugging Face 免费路线本质上仍然更偏向 **text-to-image**，所以它目前能做到的是：
+虽然当前已经接入 **Qwen 主链路 + Hugging Face fallback**，但整体仍然更偏向“提示词驱动”的生成，因此它目前能做到的是：
 
 - 人设气质尽量稳定
 - 五官方向尽量相近
@@ -435,17 +437,17 @@ node ./scripts/clawra-selfie.ts \
 
 ## 已知限制
 
-- Hugging Face 免费生图 **不是真正的 reference-image editing**
-- 人脸一致性弱于付费后端或本地高级流程
+- 当前链路仍然不是真正的强 reference-image editing
+- 人脸一致性仍弱于更强付费后端或本地高级流程
 - 不能保证每次都完全同一张脸
-- 免费后端的可用性、限额和效果可能随时间变化
+- 不同后端的可用性、限额和效果可能随时间变化
 
 ---
 
 ## FAQ / 常见问题
 
 ### 1. 为什么参考图放进去了，脸还是不能完全锁死？
-因为当前默认走的是 Hugging Face 免费 text-to-image 路线，本质上还是“提示词优先”的生成，不是强 reference-image editing，所以只能做到**软一致性**，不能做到每次完全同一张脸。
+因为当前主链路虽然已经换成 **Qwen 优先**，但本质上仍然不是强 reference-image editing，所以更多还是“提示词 + 参考图软锚点”的方式，只能做到**软一致性**，不能做到每次完全同一张脸。
 
 ### 2. 官方脸参考图应该放哪？
 推荐放在目标 agent 工作区的：
@@ -457,7 +459,7 @@ references/raya-official-face-current.jpg
 脚本会优先从这里读取当前官方脸锚点。
 
 ### 3. 没有 HF_TOKEN 会怎样？
-默认后端就是 Hugging Face，所以如果没有设置 `HF_TOKEN`，当前主链路无法正常生成图片。
+如果已经配置 `QWEN_API_KEY`，主链路仍然可以正常生成图片；`HF_TOKEN` 现在主要用于 Hugging Face fallback。只有在没有 `QWEN_API_KEY`、又希望保留 HF fallback 时，`HF_TOKEN` 才是必需的。
 
 ### 4. 为什么 README 里还提到 Gemini，但默认禁用？
 因为 Gemini 图像路线之前已经做过探针和接线，但在当前免费额度条件下不可稳定使用，所以保留了代码路径，默认关闭。
@@ -470,6 +472,7 @@ references/raya-official-face-current.jpg
 ## Roadmap
 
 - [x] 跑通 Hugging Face 生图主链路
+- [x] 接入 Qwen 图像主链路
 - [x] 拆分 direct / mirror 两种模式
 - [x] 建立官方脸软锚点机制
 - [x] 整理成 GitHub 可展示项目
@@ -493,8 +496,9 @@ references/raya-official-face-current.jpg
 
 当前这个仓库已经是一个**可实际使用的项目版本**，包含：
 
-- Hugging Face 默认生图链路
-- Gemini 默认禁用
+- Qwen 优先生图链路
+- Hugging Face fallback 生图链路
+- Gemini 可选兼容路径
 - 官方脸软锚点支持
 - 围绕 Raya 的 prompt 固化工作流
 - 可直接 clone 到其它 OpenClaw skills 目录使用
