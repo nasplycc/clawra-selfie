@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.1.3 - 2026-03-25
+
+### Changed
+- Updated README examples to prefer `QWEN_API_KEY` instead of `HF_TOKEN`
+- Synced quick-start, env vars, and shell examples with the Qwen-first setup
+
 ## v1.1.2 - 2026-03-25
 
 ### Changed
