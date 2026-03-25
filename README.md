@@ -1,81 +1,84 @@
 # Clawra Selfie
 
 <p align="center">
-  <img src="assets/clawra.png" alt="Clawra" width="220" />
+  <img src="assets/demo.jpg" alt="Clawra Demo" width="320" />
 </p>
 
 <p align="center">
-  <strong>Clawra-inspired selfie generation for OpenClaw</strong><br/>
-  A practical, free-first image workflow using Hugging Face as the active backend.
+  <strong>一个受 Clawra 启发、运行在 OpenClaw 里的自拍/日常状态图技能</strong><br/>
+  当前默认使用 Hugging Face 免费路线，兼顾可用性、成本与后续可升级性。
 </p>
 
 <p align="center">
   <img alt="status" src="https://img.shields.io/badge/status-working-3fb950">
   <img alt="backend" src="https://img.shields.io/badge/backend-HuggingFace-fcc72b">
-  <img alt="gemini" src="https://img.shields.io/badge/Gemini-disabled_by_default-6f42c1">
+  <img alt="gemini" src="https://img.shields.io/badge/Gemini-default_disabled-6f42c1">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-blue">
 </p>
 
 ---
 
-## What this is
+## 这是什么
 
-This project is inspired by [SumeLabs/clawra](https://github.com/SumeLabs/clawra), but adapted for a different practical goal:
+这个项目的灵感来自 [SumeLabs/clawra](https://github.com/SumeLabs/clawra)，但我把它改造成了一个更适合当前实际使用场景的版本：
 
-- keep the **Clawra / Raya-style image roleplay feeling**
-- integrate naturally into an **OpenClaw-native workflow**
-- avoid making **paid image backends** the default requirement
-- use a **working free Hugging Face route** today
-- preserve a clean future path toward **stronger face consistency** later
+- 保留 **Clawra / Raya 式的人设出图体验**
+- 直接融入 **OpenClaw 原生工作流**
+- 不把 **付费模型 / 付费后端** 作为默认前提
+- 先用一条**当前可跑通的 Hugging Face 免费路线**
+- 同时为后续升级到更强的人脸一致性方案预留空间
 
-In short:
+一句话概括就是：
 
-> **Clawra vibe, OpenClaw-native workflow, free-first backend strategy.**
-
----
-
-## Why this exists
-
-The original Clawra concept is genuinely compelling, but some of the more powerful model routes require paid usage.
-
-This version takes the more practical route:
-
-1. make it **work reliably first**
-2. keep the experience **good enough for daily use**
-3. structure it so stronger backends can be swapped in later
-
-That means the current version optimizes for:
-
-- usability
-- simplicity
-- low cost
-- future upgradeability
+> **Clawra 的感觉，OpenClaw 的工作流，free-first 的实现路线。**
 
 ---
 
-## Current capabilities
+## 为什么要做这个
 
-- **Prompt-driven selfie / daily-life image generation**
-- **Direct mode** for close-up selfie or current-state shots
-- **Mirror mode** for gym / outfit / half-body / full-body compositions
-- **Soft official-face mechanism** using a workspace reference image
-- **Fixed face anchor + negative anchor** for better consistency
-- **OpenClaw channel-send compatible workflow**
-- **Gemini image probe path exists but is disabled by default**
-- **Hugging Face remains the active stable backend**
+原版 Clawra 的思路很有吸引力，但其中一些更强的模型调用链路是要花钱的。
+
+这个版本的目标不是一开始就追求最强，而是先做到：
+
+1. **先能稳定用起来**
+2. **日常对话里能自然出图**
+3. **以后要升级时不用推倒重来**
+
+所以当前版本更看重：
+
+- 可用性
+- 简洁性
+- 成本控制
+- 后续升级空间
 
 ---
 
-## Backend strategy
+## 目前能做什么
 
-### Active default
+- **根据提示词生成自拍 / 日常状态图 / 场景图**
+- **Direct 模式**：适合近景自拍、当前状态、表情与氛围感
+- **Mirror 模式**：适合半身、全身、健身房、穿搭、镜前区域构图
+- **官方脸软锚点机制**：通过工作区参考图尽量稳住脸
+- **固定 FACE_ANCHOR / NEGATIVE_ANCHOR**：尽量降低脸和身材漂移
+- **可接 OpenClaw 消息发送链路**：能直接发回 Telegram 等渠道
+- **Gemini 探测链路已接入，但默认禁用**
+- **当前稳定默认后端仍是 Hugging Face**
+
+---
+
+## 当前后端策略
+
+### 默认启用
 - **Hugging Face**
-- default model: `black-forest-labs/FLUX.1-schnell`
+- 当前默认模型：
+  - `black-forest-labs/FLUX.1-schnell`
 
-### Present but disabled by default
+### 已接入但默认禁用
 - **Gemini image probe**
 
-Gemini support exists in the script, but current testing showed the image-generation route was not reliably usable as a free default path, so it is intentionally disabled unless explicitly re-enabled.
+之所以默认禁用 Gemini，是因为实际测试下来，Gemini 生图这条免费链路在当前环境下并不稳定可用，甚至会出现 **free tier = 0** 的情况。
+
+如果以后要重新打开 Gemini，可以再启用：
 
 ```bash
 ENABLE_GEMINI=1
@@ -84,20 +87,20 @@ GEMINI_API_KEY=your_google_gemini_api_key
 
 ---
 
-## Identity consistency strategy
+## 人脸一致性策略
 
-This project currently uses **soft identity consistency**, not hard face lock.
+这个项目当前走的是 **软一致性（soft consistency）**，还不是严格意义上的硬锁脸。
 
-It combines:
+目前主要通过下面几层一起工作：
 
-- a fixed **FACE_ANCHOR**
-- a fixed **NEGATIVE_ANCHOR**
-- an **official face reference file path**
-- scenario-aware prompt shaping
+- 固定的 **FACE_ANCHOR**
+- 固定的 **NEGATIVE_ANCHOR**
+- 工作区里的 **官方脸参考图路径**
+- 针对具体场景做 prompt 塑形
 
-### Official face files
+### 官方脸参考图
 
-The script checks these workspace paths:
+脚本会优先检查这些路径：
 
 - `references/raya-official-face-current.png`
 - `references/raya-official-face-current.jpg`
@@ -106,48 +109,53 @@ The script checks these workspace paths:
 - `references/raya-official-face-v1.jpg`
 - `references/raya-official-face-v1.jpeg`
 
-If one exists, it becomes the current soft identity anchor.
+如果存在，就把它当作当前“官方脸”的软锚点。
 
-### Important limitation
+### 重要限制
 
-Because the active Hugging Face free route is still mostly **text-to-image**, this project can currently offer:
+由于当前 Hugging Face 免费路线本质上仍然更偏向 **text-to-image**，所以它目前能做到的是：
 
-- stable character vibe
-- approximate facial structure consistency
-- repeatable role direction
+- 人设气质尽量稳定
+- 五官方向尽量相近
+- 连续多次出图时角色感觉不至于完全跑掉
 
-It **cannot guarantee an identical face every single run**.
+但它**还做不到每次都生成完全同一张脸**。
 
-If stronger identity consistency is needed later, the real upgrade path is a better backend — not endless prompt decoration.
+如果以后真的要更强的人脸稳定性，核心升级方向不会是继续堆 prompt，而是：
 
----
-
-## Modes
-
-### Direct mode
-Best for:
-- close-up selfie
-- current mood / status
-- casual candid shots
-- daily-life moments
-
-### Mirror mode
-Best for:
-- mirror-area shots
-- outfit photos
-- half-body / full-body framing
-- gym / campus / indoor scenes
-
-Mirror mode in this project **does not require holding a phone by default**.
+- 更强的 reference-image editing 后端
+- 本地 ComfyUI
+- LoRA / 数据集训练路线
 
 ---
 
-## Project structure
+## 模式说明
+
+### Direct 模式
+适合：
+- 近景自拍
+- 当前状态照
+- 日常随手感
+- 表情 / 气氛感 / 近景人像
+
+### Mirror 模式
+适合：
+- 镜前区域构图
+- 穿搭图
+- 半身 / 全身照
+- 健身房 / 校园 / 室内生活场景
+
+这个项目里的 Mirror 模式 **默认不要求一定拿手机**。
+
+---
+
+## 项目结构
 
 ```text
 clawra-selfie/
 ├─ assets/
-│  └─ clawra.png
+│  ├─ clawra.png
+│  └─ demo.jpg
 ├─ examples/
 │  └─ README.md
 ├─ scripts/
@@ -160,35 +168,33 @@ clawra-selfie/
 └─ SKILL.md
 ```
 
-### Key files
+### 关键文件
 
 - `scripts/clawra-selfie.sh`
-  - main backend flow
-  - prompt assembly
-  - fallback behavior
-  - output writing
+  - 主生成脚本
+  - 负责 prompt 组装、后端调用、fallback 和输出文件写入
 
 - `scripts/clawra-selfie.ts`
-  - lightweight Node wrapper
+  - 一个轻量的 Node 包装层
 
 - `SKILL.md`
-  - OpenClaw skill-facing usage guidance
+  - 面向 OpenClaw skill 使用的说明
 
 - `README.md`
-  - repository-facing project overview
+  - 面向 GitHub 仓库展示的项目说明页
 
 ---
 
-## Requirements
+## 运行要求
 
-### Required
+### 必需
 - `bash`
 - `curl`
 - `jq`
-- OpenClaw environment
+- OpenClaw 运行环境
 - Hugging Face token
 
-### Environment variables
+### 环境变量
 
 ```bash
 HF_TOKEN=your_huggingface_token
@@ -196,7 +202,7 @@ HF_IMAGE_MODEL=black-forest-labs/FLUX.1-schnell
 HF_API_BASE=https://router.huggingface.co/hf-inference/models
 ```
 
-### Optional Gemini variables
+### 可选的 Gemini 变量
 
 ```bash
 ENABLE_GEMINI=1
@@ -206,7 +212,7 @@ GEMINI_IMAGE_MODEL=gemini-2.5-flash-image
 
 ---
 
-## Usage
+## 用法示例
 
 ### Shell
 
@@ -219,7 +225,7 @@ HF_TOKEN=your_token \
   "健身房状态 ✨"
 ```
 
-### Node wrapper
+### Node 包装脚本
 
 ```bash
 node ./scripts/clawra-selfie.ts \
@@ -229,66 +235,66 @@ node ./scripts/clawra-selfie.ts \
   "上课时的侧颜 ✨"
 ```
 
-Arguments:
+参数说明：
 
-1. `user_context` — what she is doing / wearing / where she is
-2. `channel` — target provider name
-3. `mode` — `direct`, `mirror`, or `auto`
-4. `caption` — output caption
-
----
-
-## Example scenarios
-
-- morning selfie
-- breakfast shop full-body shot
-- campus classroom candid
-- post-workout gym state
-- city street snapshot
-- coffee shop side profile
-- after-class running scene
-
-More examples: [`examples/README.md`](examples/README.md)
+1. `user_context` —— 她在做什么 / 穿什么 / 身处哪里
+2. `channel` —— 目标渠道名
+3. `mode` —— `direct`、`mirror` 或 `auto`
+4. `caption` —— 输出时附带的文案
 
 ---
 
-## Known limitations
+## 场景示例
 
-- Hugging Face free generation is **not true reference-image editing**
-- identity consistency is weaker than paid or local advanced pipelines
-- exact same face cannot be guaranteed every run
-- free backends may change behavior, availability, or limits over time
+- 早安自拍
+- 早餐店全身照
+- 教室上课状态
+- 下课后操场跑步
+- 健身房状态图
+- 咖啡店侧颜
+- 城市街头随手感
+
+更多示例可以看：[`examples/README.md`](examples/README.md)
+
+---
+
+## 已知限制
+
+- Hugging Face 免费生图 **不是真正的 reference-image editing**
+- 人脸一致性弱于付费后端或本地高级流程
+- 不能保证每次都完全同一张脸
+- 免费后端的可用性、限额和效果可能随时间变化
 
 ---
 
 ## Roadmap
 
-- [x] working Hugging Face image generation path
-- [x] direct / mirror mode split
-- [x] official-face soft anchor mechanism
-- [x] GitHub-ready project packaging
-- [ ] stronger reference-image editing backend
-- [ ] configurable workspace / path abstraction
-- [ ] more polished example gallery
-- [ ] optional dataset curation flow docs
-- [ ] future LoRA-ready workflow integration
+- [x] 跑通 Hugging Face 生图主链路
+- [x] 拆分 direct / mirror 两种模式
+- [x] 建立官方脸软锚点机制
+- [x] 整理成 GitHub 可展示项目
+- [ ] 接入更强的 reference-image editing 后端
+- [ ] 抽象掉更通用的 workspace / path 配置
+- [ ] 增加更完整的示例图 / 截图展示
+- [ ] 加入数据集整理流程说明
+- [ ] 为未来 LoRA 工作流预留更清晰接口
 
 ---
 
-## Inspiration
+## 灵感来源
 
-- Original inspiration: [SumeLabs/clawra](https://github.com/SumeLabs/clawra)
-- Adaptation goal: make a usable, OpenClaw-native, lower-cost version for daily image-roleplay workflows
+- 原始灵感项目： [SumeLabs/clawra](https://github.com/SumeLabs/clawra)
+- 这个版本的目标：做一个更贴近 OpenClaw 日常使用、成本更低、但保留后续升级空间的实现
 
 ---
 
-## Status
+## 当前状态
 
-This repository currently reflects a working private-repo version with:
+当前这个仓库已经是一个**可实际使用的私有项目版本**，包含：
 
-- Hugging Face default generation
-- Gemini disabled by default
-- official-face soft anchor support
-- prompt-anchored Raya consistency workflow
+- Hugging Face 默认生图链路
+- Gemini 默认禁用
+- 官方脸软锚点支持
+- 围绕 Raya 的 prompt 固化工作流
 
-It is already usable now, while still leaving room for a much stronger second stage later.
+它现在已经能用；而更强的第二阶段，主要取决于后端升级，而不是只靠继续修 prompt。
