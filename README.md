@@ -71,20 +71,20 @@
 <table>
   <tr>
     <td align="center">
-      <img src="assets/showcase-face.jpg" alt="人脸参考示例" width="280" /><br/>
-      <sub>人脸参考 / 官方脸锚点示例</sub>
+      <img src="assets/showcase-face.jpg" alt="原参考图" width="280" /><br/>
+      <sub>原参考图 / 用作官方脸锚点</sub>
     </td>
     <td align="center">
-      <img src="assets/showcase-gym.jpg" alt="健身房状态图示例" width="280" /><br/>
-      <sub>健身房状态图 / 全身场景示例</sub>
+      <img src="assets/showcase-beach.jpg" alt="海边散步全景图" width="280" /><br/>
+      <sub>海边散步全景图 / 基于参考图的人设场景生成结果</sub>
     </td>
   </tr>
 </table>
 
-这两张图分别对应当前工作流中的两个核心用途：
+这两张图用于说明当前 README 里的完整工作流：
 
-- **左图**：作为“官方脸”或参考脸来源，用来尽量稳定角色的人脸方向
-- **右图**：作为实际场景生成结果示例，展示健身房状态图 / 全身图能力
+- **左图**：用户提供的人脸参考图，作为官方脸锚点来源
+- **右图**：基于该参考图继续生成的海边散步场景图，用来展示人物状态图与场景延展能力
 
 ---
 
@@ -179,7 +179,8 @@ clawra-selfie/
 │  ├─ clawra.png
 │  ├─ demo.jpg
 │  ├─ showcase-face.jpg
-│  └─ showcase-gym.jpg
+│  ├─ showcase-gym.jpg
+│  └─ showcase-beach.jpg
 ├─ examples/
 │  └─ README.md
 ├─ scripts/
