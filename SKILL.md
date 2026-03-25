@@ -1,12 +1,12 @@
 ---
 name: clawra-selfie
-description: Generate Clawra-style selfie images with a Hugging Face image model and send them to messaging channels via OpenClaw.
+description: Generate Clawra-style selfie images with a Qwen-first image backend (with optional Gemini and HF fallback) and send them to messaging channels via OpenClaw.
 allowed-tools: Bash(npm:*) Bash(npx:*) Bash(openclaw:*) Bash(curl:*) Read Write WebFetch
 ---
 
 # Clawra Selfie
 
-Generate Clawra-style selfies with a **Hugging Face image model** and optionally probe a **Gemini Flash image model** first (disabled by default), then send the result to OpenClaw messaging channels (Telegram, Discord, WhatsApp, Slack, etc.).
+Generate Clawra-style selfies with a **Qwen-first image backend** (DashScope `qwen-image-plus`) and optional **Gemini / Hugging Face fallback** paths, then send the result to OpenClaw messaging channels (Telegram, Discord, WhatsApp, Slack, etc.).
 
 Default current persona target:
 - Raya is an 18-year-old Chinese young woman
@@ -24,11 +24,13 @@ Default current persona target:
 ## Required Environment Variables
 
 ```bash
-HF_TOKEN=your_huggingface_token                     # optional if GEMINI_API_KEY is set
-ENABLE_GEMINI=1                                     # set to 1 to enable Gemini probe (default disabled)
-GEMINI_API_KEY=your_google_gemini_api_key          # optional probe/fallback path
-GEMINI_IMAGE_MODEL=gemini-2.5-flash-image          # optional override
-HF_IMAGE_MODEL=black-forest-labs/FLUX.1-schnell    # optional override
+QWEN_API_KEY=your_dashscope_api_key          # primary backend (recommended)
+HF_TOKEN=your_huggingface_token               # optional fallback
+ENABLE_GEMINI=1                               # set to 1 to enable Gemini probe (optional)
+GEMINI_API_KEY=your_google_gemini_api_key     # optional probe/fallback path
+GEMINI_IMAGE_MODEL=gemini-2.5-flash-image     # optional override
+QWEN_IMAGE_MODEL=qwen-image-plus              # optional override
+HF_IMAGE_MODEL=black-forest-labs/FLUX.1-schnell
 HF_API_BASE=https://router.huggingface.co/hf-inference/models
 ```
 
@@ -40,11 +42,11 @@ https://huggingface.co/settings/tokens
 
 ## Important Limitation
 
-This Hugging Face version is a **free-tier fallback**. Compared with fal.ai or other image-edit backends:
+Even with Qwen-first routing, the current workflow is still **prompt-first** (soft identity anchoring), not true reference-image editing. Compared with paid image-edit backends:
 
-- easier to try for free
+- easier to try quickly
 - but identity consistency is weaker
-- and many free HF models are **text-to-image**, not reliable reference-image editing
+- and most public models are still **text-to-image**, not guaranteed hard face lock
 
 So this version should be treated as:
 
@@ -63,7 +65,7 @@ The workspace may store an official face reference under:
 Behavior:
 
 - if a file exists, treat it as Raya's official face anchor
-- current HF free backend still uses prompt-first generation, so this is a **soft anchor**, not hard face lock
+- current Qwen/HF prompt-first workflow still treats this as a **soft anchor**, not hard face lock
 - when the backend is upgraded later to reference-image editing or local ComfyUI, reuse the same file path
 
 
@@ -77,7 +79,7 @@ Best for close-up selfie / current state / location vibe.
 ## Primary Script
 
 ```bash
-HF_TOKEN=your_token \
+QWEN_API_KEY=your_dashscope_api_key \
 /home/Jaben/.openclaw/skills/clawra-selfie/scripts/clawra-selfie.sh \
   "her desk late at night, still replying to messages" \
   "telegram" \
@@ -94,7 +96,7 @@ Arguments:
 
 ## Notes
 
-- Default model is `black-forest-labs/FLUX.1-schnell` because it is relatively easy to test on HF
-- If you find a better free HF model, set `HF_IMAGE_MODEL` instead of rewriting the whole skill
+- Default preferred model is `qwen-image-plus` via DashScope
+- If Qwen is unavailable, the script can fall back to Gemini (optional) and then Hugging Face
 - If HF returns JSON/text instead of image bytes, surface the raw error clearly
-- This version is intentionally simpler and more robust than the Gemini/fal attempts
+- This version is intentionally simpler and more robust than the earlier fal/Gemini-only attempts

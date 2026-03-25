@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.2 - 2026-03-25
+
+### Changed
+- Unified SKILL.md and script headers to the Qwen-first backend order
+- Removed remaining outdated persona suffix wording from the official-face prompt tail
+- Synced README badge version for the new release
+
 ## v1.1.1 - 2026-03-25
 
 ### Changed

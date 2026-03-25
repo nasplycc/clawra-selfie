@@ -11,7 +11,7 @@
 
 <p align="center">
   <img alt="状态" src="https://img.shields.io/badge/状态-可用-3fb950">
-  <img alt="release" src="https://img.shields.io/badge/release-v1.1.1-22c55e">
+  <img alt="release" src="https://img.shields.io/badge/release-v1.1.2-22c55e">
   <img alt="后端" src="https://img.shields.io/badge/后端-Qwen%20%2B%20HF-fcc72b">
   <img alt="Gemini" src="https://img.shields.io/badge/Gemini-可选回退-6f42c1">
   <img alt="ClawHub" src="https://img.shields.io/badge/ClawHub-nasplycc--clawra--selfie-8b5cf6">

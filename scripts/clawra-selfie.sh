@@ -1,12 +1,12 @@
 #!/bin/bash
 # clawra-selfie.sh
-# Generate/edit a Clawra selfie with Hugging Face and send it via OpenClaw.
+# Generate a Clawra selfie with Qwen-first routing and send it via OpenClaw.
 #
 # Usage:
 #   ./clawra-selfie.sh "<user_context>" "<channel>" [mode] [caption]
 #
 # Environment variables required:
-#   HF_TOKEN - Hugging Face token
+#   QWEN_API_KEY - DashScope API key (preferred) OR HF_TOKEN for fallback
 #
 # Optional env:
 #   QWEN_API_KEY    - Alibaba DashScope API key for qwen-image-plus (preferred when set)
@@ -97,7 +97,7 @@ if [ "$MODE" = "auto" ]; then
   fi
 fi
 
-# HF free route reality: text-to-image is much more reliable than image-edit on shared free infra.
+# Prompt-first route reality: even with Qwen-first routing, soft identity anchoring is more reliable than pretending this is true image-editing on shared public backends.
 # So default to a strong persona prompt that preserves the current Raya persona.
 if [ "$MODE" = "direct" ]; then
   FINAL_PROMPT="realistic close-up phone selfie of Raya, ${FACE_ANCHOR}, soft real-life lighting, direct eye contact, calm authentic expression, in ${PROMPT_CONTEXT}, candid smartphone photo, detailed skin, photorealistic, ${NEGATIVE_ANCHOR}"
@@ -106,14 +106,14 @@ else
 fi
 
 if [ -n "$OFFICIAL_FACE" ]; then
-  FINAL_PROMPT="${FINAL_PROMPT}, matching Raya's established official face reference as closely as possible, preserving her stable identity: clean natural beauty, gentle bright eyes, soft facial lines, youthful but slightly mature new-graduate vibe, consistent visual identity"
+  FINAL_PROMPT="${FINAL_PROMPT}, matching Raya's established official face reference as closely as possible, preserving her stable identity: natural clean beauty, soft bright eyes, gentle facial lines, consistent hairstyle and hair color, stable youthful Chinese features, consistent visual identity"
   log_info "Official face reference found: $OFFICIAL_FACE"
 else
   log_warn "No official face reference file found; using prompt-only identity fallback."
 fi
 
 log_info "Mode: $MODE"
-log_info "HF model: $MODEL"
+log_info "Preferred backend: ${QWEN_IMAGE_MODEL} (Qwen), fallback HF model: $MODEL"
 log_warn "Hugging Face free mode may not preserve identity as well as reference-image editing backends."
 
 QWEN_OK=0
