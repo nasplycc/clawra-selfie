@@ -150,7 +150,7 @@
 
 ```bash
 clawhub install nasplycc-clawra-selfie
-export HF_TOKEN=your_huggingface_token
+export QWEN_API_KEY=your_dashscope_api_key
 ```
 
 然后把参考图放进你的 agent 工作区：
@@ -214,7 +214,9 @@ git -C ~/.openclaw/skills/clawra-selfie pull
 3. 配置环境变量：
 
 ```bash
-HF_TOKEN=your_huggingface_token
+QWEN_API_KEY=your_dashscope_api_key
+QWEN_IMAGE_MODEL=qwen-image-plus
+HF_TOKEN=your_huggingface_token                # 可选，用于 fallback
 HF_IMAGE_MODEL=black-forest-labs/FLUX.1-schnell
 HF_API_BASE=https://router.huggingface.co/hf-inference/models
 ```
@@ -368,12 +370,14 @@ clawra-selfie/
 - `curl`
 - `jq`
 - OpenClaw 运行环境
-- Hugging Face token
+- `QWEN_API_KEY`（推荐主链路）或 `HF_TOKEN`（fallback）
 
 ### 环境变量
 
 ```bash
-HF_TOKEN=your_huggingface_token
+QWEN_API_KEY=your_dashscope_api_key
+QWEN_IMAGE_MODEL=qwen-image-plus
+HF_TOKEN=your_huggingface_token                # 可选，用于 Hugging Face fallback
 HF_IMAGE_MODEL=black-forest-labs/FLUX.1-schnell
 HF_API_BASE=https://router.huggingface.co/hf-inference/models
 ```
@@ -393,7 +397,7 @@ GEMINI_IMAGE_MODEL=gemini-2.5-flash-image
 ### Shell
 
 ```bash
-HF_TOKEN=your_token \
+QWEN_API_KEY=your_dashscope_api_key \
 ./scripts/clawra-selfie.sh \
   "at the gym, post-workout mirror-area fitness snapshot" \
   "telegram" \
