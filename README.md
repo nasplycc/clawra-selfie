@@ -13,7 +13,15 @@
   <img alt="状态" src="https://img.shields.io/badge/状态-可用-3fb950">
   <img alt="后端" src="https://img.shields.io/badge/后端-HuggingFace-fcc72b">
   <img alt="Gemini" src="https://img.shields.io/badge/Gemini-默认禁用-6f42c1">
+  <img alt="ClawHub" src="https://img.shields.io/badge/ClawHub-nasplycc--clawra--selfie-8b5cf6">
+  <img alt="安装" src="https://img.shields.io/badge/install-clawhub%20install%20nasplycc--clawra--selfie-0ea5e9">
   <img alt="许可证" src="https://img.shields.io/badge/许可证-MIT-blue">
+</p>
+
+<p align="center">
+  <a href="https://clawhub.com/nasplycc-clawra-selfie">ClawHub 页面</a> ·
+  <a href="https://github.com/nasplycc/clawra-selfie">GitHub 仓库</a> ·
+  <a href="https://github.com/SumeLabs/clawra">原始参考项目</a>
 </p>
 
 ---
@@ -27,6 +35,9 @@
 - 不把 **付费模型 / 付费后端** 作为默认前提
 - 先用一条**当前可跑通的 Hugging Face 免费路线**
 - 同时为后续升级到更强的人脸一致性方案预留空间
+
+**原始参考项目：**
+- GitHub: <https://github.com/SumeLabs/clawra>
 
 一句话概括就是：
 
