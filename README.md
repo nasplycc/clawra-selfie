@@ -6,14 +6,14 @@
 
 <p align="center">
   <strong>一个受 Clawra 启发、运行在 OpenClaw 里的自拍/日常状态图技能</strong><br/>
-  当前默认使用 Hugging Face 免费路线，兼顾可用性、成本与后续可升级性。
+  当前已接入 Qwen 图像后端，并保留 Hugging Face / Gemini 的兼容升级路径。
 </p>
 
 <p align="center">
   <img alt="状态" src="https://img.shields.io/badge/状态-可用-3fb950">
   <img alt="release" src="https://img.shields.io/badge/release-v1.0.0-22c55e">
-  <img alt="后端" src="https://img.shields.io/badge/后端-HuggingFace-fcc72b">
-  <img alt="Gemini" src="https://img.shields.io/badge/Gemini-默认禁用-6f42c1">
+  <img alt="后端" src="https://img.shields.io/badge/后端-Qwen%20%2B%20HF-fcc72b">
+  <img alt="Gemini" src="https://img.shields.io/badge/Gemini-可选回退-6f42c1">
   <img alt="ClawHub" src="https://img.shields.io/badge/ClawHub-nasplycc--clawra--selfie-8b5cf6">
   <img alt="安装" src="https://img.shields.io/badge/install-clawhub%20install%20nasplycc--clawra--selfie-0ea5e9">
   <img alt="许可证" src="https://img.shields.io/badge/许可证-MIT-blue">
@@ -110,20 +110,25 @@
 <table>
   <tr>
     <td align="center">
-      <img src="assets/showcase-face.jpg" alt="原参考图" width="280" /><br/>
-      <sub>原参考图 / 用作官方脸锚点</sub>
+      <img src="assets/showcase-face.jpg" alt="新参考图" width="250" /><br/>
+      <sub>新参考图 / 当前官方脸锚点</sub>
     </td>
     <td align="center">
-      <img src="assets/showcase-beach.jpg" alt="海边散步全景图" width="280" /><br/>
-      <sub>海边散步全景图 / 基于参考图的人设场景生成结果</sub>
+      <img src="assets/showcase-gym.jpg" alt="健身房镜子前自拍" width="250" /><br/>
+      <sub>健身房镜子前自拍 / 基于参考图生成</sub>
+    </td>
+    <td align="center">
+      <img src="assets/showcase-beach.jpg" alt="海边散步全景图" width="250" /><br/>
+      <sub>海边散步全景图 / 基于参考图的人设场景延展</sub>
     </td>
   </tr>
 </table>
 
-这两张图用于说明当前 README 里的完整工作流：
+这三张图用于说明当前 README 里的完整工作流：
 
-- **左图**：用户提供的人脸参考图，作为官方脸锚点来源
-- **右图**：基于该参考图继续生成的海边散步场景图，用来展示人物状态图与场景延展能力
+- **左图**：用户提供的新参考图，作为当前官方脸锚点来源
+- **中图**：基于该参考图生成的健身房镜前自拍，用来展示日常状态图能力
+- **右图**：继续沿用同一参考图生成的海边散步场景图，用来展示人物场景延展能力
 
 ---
 

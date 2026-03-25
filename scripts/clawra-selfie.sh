@@ -9,6 +9,8 @@
 #   HF_TOKEN - Hugging Face token
 #
 # Optional env:
+#   QWEN_API_KEY    - Alibaba DashScope API key for qwen-image-plus (preferred when set)
+#   QWEN_IMAGE_MODEL - default: qwen-image-plus
 #   ENABLE_GEMINI - set to 1 to enable Gemini image probe (default disabled)
 #   GEMINI_API_KEY - Google Gemini API key for image generation probe/fallback
 #   GEMINI_IMAGE_MODEL - default: gemini-2.5-flash-image
@@ -32,9 +34,9 @@ log_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
 log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
-if [ -z "${HF_TOKEN:-}" ] && ! { [ "${ENABLE_GEMINI:-0}" = "1" ] && [ -n "${GEMINI_API_KEY:-}" ]; }; then
-  log_error "HF_TOKEN is required unless Gemini probe is explicitly enabled with GEMINI_API_KEY"
-  echo "Set HF_TOKEN for Hugging Face, or set ENABLE_GEMINI=1 with GEMINI_API_KEY"
+if [ -z "${HF_TOKEN:-}" ] && [ -z "${QWEN_API_KEY:-}" ] && ! { [ "${ENABLE_GEMINI:-0}" = "1" ] && [ -n "${GEMINI_API_KEY:-}" ]; }; then
+  log_error "Either QWEN_API_KEY or HF_TOKEN is required unless Gemini probe is explicitly enabled with GEMINI_API_KEY"
+  echo "Set QWEN_API_KEY for DashScope qwen-image-plus, or HF_TOKEN for Hugging Face, or set ENABLE_GEMINI=1 with GEMINI_API_KEY"
   exit 1
 fi
 
@@ -53,6 +55,7 @@ CHANNEL="${2:-}"
 MODE="${3:-auto}"
 CAPTION="${4:-Raya 的自拍 ✨}"
 MODEL="${HF_IMAGE_MODEL:-black-forest-labs/FLUX.1-schnell}"
+QWEN_IMAGE_MODEL="${QWEN_IMAGE_MODEL:-qwen-image-plus}"
 GEMINI_IMAGE_MODEL="${GEMINI_IMAGE_MODEL:-gemini-2.5-flash-image}"
 HF_API_BASE="${HF_API_BASE:-https://router.huggingface.co/hf-inference/models}"
 WORKDIR="$(mktemp -d)"
@@ -113,9 +116,71 @@ log_info "Mode: $MODE"
 log_info "HF model: $MODEL"
 log_warn "Hugging Face free mode may not preserve identity as well as reference-image editing backends."
 
+QWEN_OK=0
+if [ -n "${QWEN_API_KEY:-}" ]; then
+  QWEN_REQ_JSON="$WORKDIR/qwen-request.json"
+  QWEN_RESP_JSON="$WORKDIR/qwen-response.json"
+  QWEN_RESULT_JSON="$WORKDIR/qwen-result.json"
+  jq -n --arg model "$QWEN_IMAGE_MODEL" --arg prompt "$FINAL_PROMPT" '{model:$model,input:{prompt:$prompt},parameters:{size:"1024*1024"}}' > "$QWEN_REQ_JSON"
+  log_info "Trying Qwen image model: $QWEN_IMAGE_MODEL"
+  QWEN_HTTP_CODE=$(curl -sS \
+    -o "$QWEN_RESP_JSON" \
+    -w '%{http_code}' \
+    -X POST "https://dashscope.aliyuncs.com/api/v1/services/aigc/text2image/image-synthesis" \
+    -H "Authorization: Bearer $QWEN_API_KEY" \
+    -H "Content-Type: application/json" \
+    -H "X-DashScope-Async: enable" \
+    --data-binary "@$QWEN_REQ_JSON" || true)
+
+  if [ "${QWEN_HTTP_CODE:-0}" -lt 400 ]; then
+    QWEN_TASK_ID=$(jq -r '.output.task_id // empty' "$QWEN_RESP_JSON" 2>/dev/null || true)
+    if [ -n "$QWEN_TASK_ID" ]; then
+      for _ in $(seq 1 20); do
+        sleep 3
+        QWEN_RESULT_HTTP_CODE=$(curl -sS \
+          -o "$QWEN_RESULT_JSON" \
+          -w '%{http_code}' \
+          -X GET "https://dashscope.aliyuncs.com/api/v1/tasks/${QWEN_TASK_ID}" \
+          -H "Authorization: Bearer $QWEN_API_KEY" || true)
+        [ "${QWEN_RESULT_HTTP_CODE:-0}" -ge 400 ] && continue
+        QWEN_TASK_STATUS=$(jq -r '.output.task_status // empty' "$QWEN_RESULT_JSON" 2>/dev/null || true)
+        if [ "$QWEN_TASK_STATUS" = "SUCCEEDED" ]; then
+          QWEN_IMAGE_URL=$(jq -r '.output.results[0].url // empty' "$QWEN_RESULT_JSON" 2>/dev/null || true)
+          if [ -n "$QWEN_IMAGE_URL" ]; then
+            FINAL_PATH="$OUTPUT_DIR/clawra-selfie.png"
+            curl -sS -L "$QWEN_IMAGE_URL" -o "$FINAL_PATH"
+            QWEN_OK=1
+            MODEL="$QWEN_IMAGE_MODEL"
+            log_info "Qwen image generation succeeded"
+            break
+          fi
+        elif [ "$QWEN_TASK_STATUS" = "FAILED" ] || [ "$QWEN_TASK_STATUS" = "CANCELED" ]; then
+          break
+        fi
+      done
+    fi
+  fi
+
+  if [ "$QWEN_OK" -ne 1 ]; then
+    log_warn "Qwen image generation unavailable or incomplete; falling back to Gemini/Hugging Face"
+    if [ -s "$QWEN_RESP_JSON" ]; then
+      echo "--- Qwen submit response (truncated) ---"
+      head -c 1200 "$QWEN_RESP_JSON" || true
+      echo ""
+      echo "--- end ---"
+    fi
+    if [ -s "$QWEN_RESULT_JSON" ]; then
+      echo "--- Qwen task response (truncated) ---"
+      head -c 1200 "$QWEN_RESULT_JSON" || true
+      echo ""
+      echo "--- end ---"
+    fi
+  fi
+fi
+
 GEMINI_TRIED=0
 GEMINI_OK=0
-if [ "${ENABLE_GEMINI:-0}" = "1" ] && [ -n "${GEMINI_API_KEY:-}" ]; then
+if [ "$QWEN_OK" -ne 1 ] && [ "${ENABLE_GEMINI:-0}" = "1" ] && [ -n "${GEMINI_API_KEY:-}" ]; then
   GEMINI_TRIED=1
   GEMINI_RESP_JSON="$WORKDIR/gemini-response.json"
   GEMINI_IMAGE_B64="$WORKDIR/gemini-image.b64"
@@ -153,9 +218,9 @@ if [ "${ENABLE_GEMINI:-0}" = "1" ] && [ -n "${GEMINI_API_KEY:-}" ]; then
   fi
 fi
 
-if [ "$GEMINI_OK" -ne 1 ]; then
+if [ "$QWEN_OK" -ne 1 ] && [ "$GEMINI_OK" -ne 1 ]; then
   if [ -z "${HF_TOKEN:-}" ]; then
-    log_error "Gemini failed and HF_TOKEN is not set for fallback"
+    log_error "Qwen/Gemini failed and HF_TOKEN is not set for fallback"
     exit 1
   fi
 
