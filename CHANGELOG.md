@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.1.1 - 2026-03-25
+
+### Changed
+- Cleaned up remaining Hugging Face-first wording in README
+- Synced README backend strategy text with the real runtime order
+- Clarified FAQ / limitations / current status sections around Qwen-first routing
+
 ## v1.1.0 - 2026-03-25
 
 ### Added
